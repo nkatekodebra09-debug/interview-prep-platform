@@ -1,0 +1,5 @@
+name: New Environment
+values:
+  - key: json_web_token_19y3
+    secret: true
+color: 240
