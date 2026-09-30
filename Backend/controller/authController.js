@@ -1,54 +1,92 @@
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const asyncHandler = require('../middleware/asyncHandler');
 
-const generateToken = (user) => {
+function generateToken(user) {
   return jwt.sign(
     { id: user._id, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: '1d' }
   );
-};
+}
 
-const registerUser = async (req, res) => {
-  try {
-    const { name, email, password, role } = req.body;
+function publicUser(user) {
+  return {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    role: user.role,
+    isApproved: user.isApproved,
+  };
+}
 
-    const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ message: 'User already exists' });
+const registerUser = asyncHandler(async (req, res) => {
+  const { username, email, password, role } = req.body;
 
-    const user = await User.create({ name, email, password, role });
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'Username, email, and password are required' });
   }
-};
 
-const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const exists = await User.findOne({
+    $or: [
+      { email: String(email).toLowerCase() },
+      { username: String(username) }
+    ],
+  });
 
-    const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password))) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    res.json({
-      token: generateToken(user),
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  if (exists) {
+    return res.status(400).json({ message: 'User already exists' });
   }
-};
 
-module.exports = { registerUser, loginUser };
+  const safeRole = role === 'instructor' ? 'instructor' : 'student';
+
+  const user = await User.create({
+    username,
+    email,
+    password,
+    role: safeRole,
+    isApproved: safeRole === 'student',
+  });
+
+  res.status(201).json({
+    message: user.isApproved
+      ? 'Registration successful'
+      : 'Registration successful. Admin approval required for instructor accounts.',
+    user: publicUser(user),
+  });
+});
+
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
+  const user = await User.findOne({ email: String(email).toLowerCase() }).select('+password');
+
+  if (!user || !(await user.matchPassword(password))) {
+    return res.status(401).json({ message: 'Invalid email or password' });
+  }
+
+  if (user.isBlocked) {
+    return res.status(403).json({ message: 'Your account has been blocked' });
+  }
+
+  if (!user.isApproved) {
+    return res.status(403).json({ message: 'Your account is awaiting admin approval' });
+  }
+
+  res.json({
+    token: generateToken(user),
+    user: publicUser(user),
+  });
+});
+
+const getMe = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  res.json(publicUser(user));
+});
+
+module.exports = { registerUser, loginUser, getMe };
+

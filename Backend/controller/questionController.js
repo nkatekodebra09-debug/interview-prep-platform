@@ -1,30 +1,73 @@
 const Question = require('../models/Question');
+const QuestionSet = require('../models/QuestionSet');
+const asyncHandler = require('../middleware/asyncHandler');
 
-const createQuestion = async (req, res) => {
-  try {
-    const { text, type, options, correctAnswer } = req.body;
-
-    const question = await Question.create({
-      text,
-      type,
-      options,
-      correctAnswer,
-      createdBy: req.user.id
-    });
-
-    return res.status(201).json(question);
-  } catch (error) {
-    return res.status(500).json({ message: 'Server error', error: error.message });
+async function loadSetForEditing(setId, user) {
+  const set = await QuestionSet.findById(setId);
+  if (!set) {
+    return { error: { code: 404, message: 'Question set not found' } };
   }
-};
-
-const getQuestions = async (req, res) => {
-  try {
-    const questions = await Question.find();
-    return res.json(questions);
-  } catch (error) {
-    return res.status(500).json({ message: 'Server error', error: error.message });
+  if (user.role !== 'admin' && set.createdBy.toString() !== user.id) {
+    return { error: { code: 403, message: 'You can only edit your own sets' } };
   }
-};
+  return { set };
+}
 
-module.exports = { createQuestion, getQuestions };
+const createQuestion = asyncHandler(async (req, res) => {
+  const { questionSet, text, type, options, correctAnswer } = req.body;
+
+  const { error } = await loadSetForEditing(questionSet, req.user);
+  if (error) {
+    return res.status(error.code).json({ message: error.message });
+  }
+
+  const question = await Question.create({
+    questionSet,
+    text,
+    type,
+    options,
+    correctAnswer,
+    createdBy: req.user.id,
+  });
+
+  res.status(201).json(question);
+});
+
+const updateQuestion = asyncHandler(async (req, res) => {
+  const question = await Question.findById(req.params.id);
+  if (!question) {
+    return res.status(404).json({ message: 'Question not found' });
+  }
+
+  const { error } = await loadSetForEditing(question.questionSet, req.user);
+  if (error) {
+    return res.status(error.code).json({ message: error.message });
+  }
+
+  ['text', 'type', 'options', 'correctAnswer'].forEach(field => {
+    if (req.body[field] !== undefined) {
+      question[field] = req.body[field];
+    }
+  });
+
+  await question.save();
+  res.json(question);
+});
+
+const deleteQuestion = asyncHandler(async (req, res) => {
+  const question = await Question.findById(req.params.id);
+  if (!question) {
+    return res.status(404).json({ message: 'Question not found' });
+  }
+
+  const { error } = await loadSetForEditing(question.questionSet, req.user);
+  if (error) {
+    return res.status(error.code).json({ message: error.message });
+  }
+
+  await question.deleteOne();
+  res.json({ message: 'Question deleted successfully' });
+});
+
+module.exports = { createQuestion, updateQuestion, deleteQuestion };
+
