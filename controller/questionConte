@@ -1,0 +1,24 @@
+const Question = require('../models/Question');
+
+const createQuestion = async (req, res) => {
+    try {
+        const { text, type, options, correctAnswer } = req.body;
+        const question = await Question.create({
+            text, type, options, correctAnswer, createBy: req.user.id
+        });
+        res.status(201).json(question);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getQuestions = async (req, res) => {
+    try{
+        const questions = await Question.find();
+        res.json(questions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { createQuestion, getQuestions };
