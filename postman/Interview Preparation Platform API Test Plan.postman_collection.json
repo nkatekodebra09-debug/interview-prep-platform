@@ -1,0 +1,198 @@
+{
+  "info": {
+    "name": "Interview Preparation Platform API Test Plan",
+    "_postman_id": "abcd1234-5678-efgh-ijkl-9876543210",
+    "description": "Test plan for Student, Instructor, and Admin roles in the Interview Preparation Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Student",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "http://localhost:5000/api/auth/register" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"NkatekoStudent\",\n  \"email\": \"student@example.com\",\n  \"password\": \"12345678\",\n  \"role\": \"student\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login Student",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "http://localhost:5000/api/auth/login" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student@example.com\",\n  \"password\": \"12345678\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register Instructor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "http://localhost:5000/api/auth/register" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"Teacher1\",\n  \"email\": \"teacher@example.com\",\n  \"password\": \"12345678\",\n  \"role\": \"instructor\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login Instructor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "http://localhost:5000/api/auth/login" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teacher@example.com\",\n  \"password\": \"12345678\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "http://localhost:5000/api/auth/register" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"Admin1\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"12345678\",\n  \"role\": \"admin\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "http://localhost:5000/api/auth/login" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"12345678\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Questions",
+      "item": [
+        {
+          "name": "Create Question (Instructor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{instructor_token}}" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/questions" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"What is 2+2?\",\n  \"type\": \"mcq\",\n  \"options\": [\"2\", \"3\", \"4\"],\n  \"correctAnswer\": \"4\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Fetch Questions (Student)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/questions" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Submissions",
+      "item": [
+        {
+          "name": "Submit Answer (Student)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/submissions" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"QUESTION_ID\",\n  \"answer\": \"4\"\n}"
+            }
+          }
+        },
+        {
+          "name": "View Own Submissions (Student)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/submissions" }
+          }
+        },
+        {
+          "name": "View All Submissions (Instructor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{instructor_token}}" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/submissions" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/admin/users" }
+          }
+        },
+        {
+          "name": "Block User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/admin/users/:id" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blocked\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": { "raw": "http://localhost:5000/api/admin/users/:id" }
+          }
+        }
+      ]
+    }
+  ]
+}
+
