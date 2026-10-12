@@ -1,38 +1,25 @@
 const express = require('express');
-const Submission = require('../models/Submission');
-const Question = require('../models/Question');
+const {
+  submitAttempt,
+  getMyAttempts,
+  getAttemptById,
+  getPerformance,
+  getLeaderboard,
+  getInstructorSubmissions,
+  reviewSubmission,
+} = require('../controller/submissionController');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.post('/', protect(['student']), async (req, res) => {
-    const { question: questionId, answer } = req.body;
-    const foundQuestion = await Question.findById(questionId);
+router.post('/', protect(['student']), submitAttempt);
+router.get('/', protect(['student']), getMyAttempts);
 
-    if (!foundQuestion) {
-        return res.status(404).json({
-            message: 'Question not found'
-        });
-    }
+router.get('/leaderboard', protect(), getLeaderboard);
+router.get('/performance', protect(['instructor', 'admin']), getPerformance);
+router.get('/review-queue', protect(['instructor', 'admin']), getInstructorSubmissions);
+router.patch('/:id/review', protect(['instructor', 'admin']), reviewSubmission);
 
-    let score = 0;
-    if (foundQuestion.type === 'mcq' && foundQuestion.correctAnswer === answer) {
-        score = 1;
-    }
-
-    const submission = await Submission.create({
-        student: req.user.id,
-        question: foundQuestion._id,
-        answer,
-        score
-    });
-
-    res.status(201).json(submission);
-});
-
-router.get('/', protect(['student', 'instructor', 'admin']), async (req, res) =>{
-    const submission = await Submission.find({student: req.user.id}).populate('question')
-    res.json(submission);
-});
+router.get('/:id', protect(['student']), getAttemptById);
 
 module.exports = router;

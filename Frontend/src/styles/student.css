@@ -1,0 +1,115 @@
+.student-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 30px;
+}
+.student-stat {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  color: #93c5fd;
+  background: rgba(15, 23, 42, 0.74);
+}
+.student-stat strong,
+.student-stat span {
+  display: block;
+}
+.student-stat strong {
+  color: var(--text);
+  font-size: 1.4rem;
+}
+.student-stat span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.workspace-section {
+  margin-top: 30px;
+}
+.workspace-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.practice-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.74);
+}
+.practice-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.practice-tags span {
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #bfdbfe;
+  background: rgba(96, 165, 250, 0.1);
+  font-size: 0.72rem;
+  text-transform: capitalize;
+}
+.practice-card h3 {
+  margin-top: 13px;
+  font-size: 1.08rem;
+}
+.practice-card > p {
+  flex: 1;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 0.87rem;
+}
+.practice-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 15px 0;
+  color: var(--muted);
+  font-size: 0.77rem;
+}
+.practice-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.practice-start {
+  width: 100%;
+  padding: 11px 14px;
+}
+.attempt-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.attempt-result > strong {
+  color: #a7f3d0;
+  font-size: 1.2rem;
+}
+.attempt-result > span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.attempt-result a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  color: #bfdbfe;
+  font-size: 0.82rem;
+  font-weight: 700;
+}

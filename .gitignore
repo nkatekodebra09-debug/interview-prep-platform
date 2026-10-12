@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+**/.git/
 
 # Environment variables and local secrets
 .env
@@ -15,6 +16,7 @@ pnpm-debug.log*
 coverage/
 dist/
 build/
+*-submission.zip
 
 # OS and editor files
 .DS_Store

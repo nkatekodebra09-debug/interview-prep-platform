@@ -5,8 +5,10 @@ function notFound(req, res) {
 }
 
 function errorHandler(err, req, res, next) {
+  if (res.headersSent) return next(err);
+
   if (err.name === 'ValidationError') {
-    const messages = Object.values(err.errors).map(e => e.message);
+    const messages = Object.values(err.errors).map((e) => e.message);
     return res.status(400).json({ message: messages.join('. ') });
   }
 

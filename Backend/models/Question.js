@@ -1,42 +1,51 @@
 const mongoose = require('mongoose');
 
-const questionSchema = new mongoose.Schema({
+const questionSchema = new mongoose.Schema(
+  {
+    questionSet: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'QuestionSet',
+      required: true,
+    },
+
     text: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
 
     type: {
-        type: String,
-        enum: ['mcq', 'descriptive'],
-        required: true,
+      type: String,
+      enum: ['mcq', 'descriptive'],
+      required: true,
     },
 
     options: {
-        type: [String],
-        required: true,
+      type: [String],
+      required: true,
     },
 
     correctAnswer: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
 
     createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
 
     createdAt: {
-        type: Date,
-        default: Date.now,
+      type: Date,
+      default: Date.now,
     },
 
     updatedAt: {
-        type: Date,
-        default: Date.now,
+      type: Date,
+      default: Date.now,
     },
-}, { timestamps: true });
+  },
+  { timestamps: true },
+);
 
 module.exports = mongoose.model('Question', questionSchema);

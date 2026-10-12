@@ -27,7 +27,7 @@ const protect = (roles = []) => {
         return res.status(403).json({ message: 'Account blocked by admin' });
       }
 
-      if (!user.isApproved) {
+      if (user.role === 'instructor' && !user.isApproved) {
         return res.status(403).json({ message: 'Account pending admin approval' });
       }
 

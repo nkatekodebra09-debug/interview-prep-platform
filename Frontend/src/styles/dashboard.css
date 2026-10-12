@@ -1,0 +1,222 @@
+/* Styles for the standalone legacy analytics dashboard component. */
+.dashboard-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 70px;
+}
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.dashboard-header h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.05em;
+}
+.header-chip,
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: 1px solid rgba(94, 234, 212, 0.22);
+  border-radius: 999px;
+  color: #d1fae5;
+  background: rgba(94, 234, 212, 0.11);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+.pill.muted {
+  border-color: rgba(148, 163, 184, 0.2);
+  color: #dfe7f2;
+  background: rgba(148, 163, 184, 0.1);
+}
+.pill.success {
+  border-color: rgba(52, 211, 153, 0.22);
+  color: #bbf7d0;
+  background: rgba(52, 211, 153, 0.12);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.stat-card,
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.7);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.2);
+}
+.stat-card {
+  padding: 18px 18px 20px;
+}
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.stat-label {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.stat-icon {
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: #e2e8f0;
+}
+.stat-value {
+  margin-top: 20px;
+  font-size: clamp(1.9rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+.stat-trend {
+  margin-top: 10px;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+}
+.dashboard-grid,
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+.panel {
+  padding: 20px;
+}
+.large-panel {
+  min-height: 320px;
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.panel-header h3 {
+  font-size: 1.1rem;
+}
+.chart-wrap {
+  width: 100%;
+  height: 260px;
+}
+.small-chart {
+  height: 220px;
+}
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 10px;
+}
+.skill-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.skill-label-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.progress-track {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.1);
+}
+.progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #60a5fa, #5eead4);
+}
+.ring-wrap {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding-top: 8px;
+}
+.progress-ring {
+  display: flex;
+  width: 150px;
+  height: 150px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.progress-center {
+  display: grid;
+  width: 105px;
+  height: 105px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(9, 15, 28, 0.9);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.ring-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.ring-legend > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot.blue {
+  background: #60a5fa;
+}
+.dot.violet {
+  background: #a78bfa;
+}
+.dot.teal {
+  background: #5eead4;
+}
+.focus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.focus-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(148, 163, 184, 0.03);
+}
+.focus-list strong {
+  display: block;
+  margin-bottom: 3px;
+}
+.focus-list small {
+  color: var(--muted);
+}
