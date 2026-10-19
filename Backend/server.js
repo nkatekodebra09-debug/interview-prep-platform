@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const { randomBytes } = require('crypto');
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 
+const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
@@ -15,7 +17,6 @@ const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
@@ -39,18 +40,21 @@ app.use(notFound);
 app.use(errorHandler);
 
 async function start() {
-  if (!mongoUri) {
-    throw new Error(
-      'Missing MONGODB_URI in Backend/.env. Configure a reachable MongoDB database first.',
-    );
-  }
-  if (!process.env.JWT_SECRET) {
+  const production = process.env.NODE_ENV === 'production';
+  const hasJwtSecret =
+    process.env.JWT_SECRET && !/^(your_|replace-with|<)/i.test(process.env.JWT_SECRET.trim());
+
+  if (!hasJwtSecret && production) {
     throw new Error(
       'Missing JWT_SECRET in Backend/.env. Set a long, random secret before starting the API.',
     );
   }
+  if (!hasJwtSecret) {
+    process.env.JWT_SECRET = randomBytes(32).toString('hex');
+    console.warn('No JWT_SECRET configured; generated a development-only secret.');
+  }
 
-  await mongoose.connect(mongoUri);
+  await connectDB();
   console.log('MongoDB connected');
   app.listen(PORT, () => {
     console.log(`API ready at http://localhost:${PORT}`);

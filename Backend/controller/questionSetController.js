@@ -88,7 +88,11 @@ const getQuestionSetById = asyncHandler(async (req, res) => {
   let questions = await Question.find({ questionSet: set._id }).sort('createdAt').lean();
 
   if (!owner) {
-    questions = questions.map(({ correctAnswer, ...safe }) => safe); // eslint-disable-line no-unused-vars
+    questions = questions.map((question) => {
+      const safeQuestion = { ...question };
+      delete safeQuestion.correctAnswer;
+      return safeQuestion;
+    });
   }
 
   res.json({ ...set, questions });

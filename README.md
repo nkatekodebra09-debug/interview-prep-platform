@@ -12,15 +12,15 @@ MERN app for student interview practice, instructor-authored question sets, and 
 ## Requirements
 
 - Node.js 20.19+ (or 22.12+)
-- MongoDB running locally or a MongoDB Atlas connection string
+- MongoDB running locally or a MongoDB Atlas connection string for a shared or production database
 
 ## Run locally
 
 The application is organized into the backend in `Backend/` and the React app in `Frontend/`.
 
 1. Run `npm install` from the repository root. The frontend is an npm workspace, so its dependencies are installed with the root dependencies.
-2. Copy `Backend/.env.example` to `Backend/.env`, set `MONGODB_URI` and a unique `JWT_SECRET`.
-3. Start MongoDB, then run `npm run dev` at the repository root. This starts the API on port 5000 and Vite on port 5173 (or the next available port).
+2. For a shared database, copy `Backend/.env.example` to `Backend/.env` and set `MONGODB_URI` and a unique `JWT_SECRET`. For local development without MongoDB, the API starts a local development database automatically and stores its data in `Backend/.data/`.
+3. Run `npm run dev` at the repository root. This starts the API on port 5000 and Vite on port 5173 (or the next available port).
 4. Open the Vite URL shown in the terminal and register as a student or instructor.
 
 For a reproducible clean install, use `npm ci` at the root. Build the production frontend from the root with `npm run build`. Use `npm run format` to format the project source and `npm run format:check` to verify formatting.
